@@ -2,7 +2,8 @@
 /* eslint-disable no-alert */
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-native/no-unused-styles */
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
 import {
   View,
   Text,
@@ -19,12 +20,23 @@ import visibility2 from './images/visibility2.png';
 import InputItem from './inputItem.js';
 
 const SignUp = () => {
-  const [name, setName] = useState('');
+  onLogin = () => {
+    axios
+      .post('https://proxibox-pharma-api-staging.enouvo.com/api/v1/auth/login', {
+        email: 'ngantran@gmail.com',
+        password: 'ngan123',
+      })
+      .then(
+        (response) => {
+          console.log(response);
+        },
+        (error) => {
+          console.log(error);
+        },
+      );
+  };
   const [password, setPassword] = useState('');
-  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [confirm, setConfirm] = useState('');
   const [hidenVal, setHidenVal] = useState(true);
 
   const onLoginClicked = () => {
@@ -50,26 +62,10 @@ const SignUp = () => {
     <ScrollView style={styles.container}>
       <View style={styles.header}>
         <Image source={close} style={styles.closeForm} />
-        <Text style={styles.formName}>Đăng ký</Text>
+        <Text style={styles.formName}>Đăng nhập</Text>
       </View>
 
-      <InputItem
-        value={'Tên người dùng*'}
-        styles={styles.textInput}
-        onChangeText={(val) => setName(val)}
-      />
       <InputItem value={'Email*'} styles={styles.textInput} onChangeText={(val) => setEmail(val)} />
-      <InputItem
-        value={'Số điện thoại*'}
-        styles={styles.textInput}
-        onChangeText={(val) => setPhone(val)}
-      />
-      <InputItem
-        value={'Tên tài khoản*'}
-        styles={styles.textInput}
-        onChangeText={(val) => setUsername(val)}
-      />
-
       <View>
         <Text> Mật khẩu*</Text>
         <TouchableOpacity>
@@ -82,29 +78,8 @@ const SignUp = () => {
         />
       </View>
 
-      <View>
-        <Text> Xác nhận mật khẩu*</Text>
-        <TouchableOpacity>
-          <Image source={hidenVal ? visibility1 : visibility2} style={styles.eyeImage2} />
-        </TouchableOpacity>
-        <TextInput
-          secureTextEntry={true}
-          style={styles.textInput}
-          onChangeText={(val) => setConfirm(val)}
-        />
-      </View>
-
       <View style={styles.button}>
-        <TouchableOpacity
-          style={styles.loginButton}
-          onPress={() =>
-            Navigation.push('MyStack', {
-              component: {
-                name: 'Login',
-              },
-            })
-          }
-        >
+        <TouchableOpacity style={styles.loginButton} onPress={() => onLogin()}>
           <Text style={{ textAlign: 'center' }}>Đăng nhập</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.registerButton} onPress={onLoginClicked}>
